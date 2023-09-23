@@ -11,7 +11,7 @@ import googleapiclient.errors
 
 scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
-def main():
+def main(query):
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -26,9 +26,9 @@ def main():
 
     request = youtube.search().list(
         part="snippet",
-        maxResults=25,
-        q="surfing"
+        maxResults=10,
+        q=query
     )
     response = request.execute()
 
-    return response[0]
+    return response
