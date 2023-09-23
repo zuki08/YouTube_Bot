@@ -1,6 +1,7 @@
 import modules.ind_API as proc
 from dotenv import load_dotenv
 import os
+import time
 
 load_dotenv()
 
@@ -18,16 +19,27 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.author == client.user:
+        await message.delete(delay=330)
         return
-    if message.content.startswith('$hello'):
+    if message.content.startswith('-hello'):
         await message.channel.send(f"Hello {message.author.mention}")
-    if message.content.split(" ")[0] == '$search':
+    if message.content.split(" ")[0] == '-search':
         query = message.content[8:].strip()
         # print(query)
-        proc.search(query)
+        link = proc.search(query)
         await message.channel.send(f"Here's what you searched: `{query}`")
-    if(message.content == 'close'):
+        await message.channel.send(link)
+    if(message.content == '-close'):
         proc.close_leConn()
-        exit()
-    
+        async for s in message.channel.history():
+            if s.author == client.user:
+                await s.delete()
+        await message.delete()
+        await client.close()
+    await message.delete()
+    if message.content == "-list":
+        ret = ""
+        for val in proc.list():
+            ret += str(val)+ "\n"
+        await message.channel.send(ret) 
 client.run(os.getenv('TOKEN'))

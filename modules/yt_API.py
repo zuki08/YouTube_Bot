@@ -27,7 +27,8 @@ def main(query):
     request = youtube.search().list(
         part="snippet",
         maxResults=10,
-        q=query
+        q=query,
+        type="video"
     )
     response = request.execute()
 
