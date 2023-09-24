@@ -36,7 +36,7 @@ async def on_message(message):
                 await s.delete()
         await message.delete()
         await client.close()
-    await message.delete()
+    # await message.delete()
     if message.content == "-list":
         ret = ""
         for val in proc.list():
